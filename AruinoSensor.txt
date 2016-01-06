@@ -1,0 +1,64 @@
+//By : Matthew Puentes
+// This code will make the servo motor rotate 180 degrees when an object is within 20 cm of ultra sonic sensor.
+ 
+#include <Servo.h>
+#define echoPin 4 //Echo pin
+#define trigPin 3 //Trigger Pin
+ 
+Servo myServo1; // creating servo object to control a servo
+int pos = 0; // setting the myServo1 object to a position of 0
+ 
+int maximumRange = 200; //Max range needed
+int minimumRange = 0; //Min range needed
+long duration , distance ; // Duration is used to calc. dist
+ 
+// setup your pins (which is inp. or outp.)
+ 
+void setup () {
+ 
+myServo1.attach(11); //Attaches the servo pin 6 to servo obj.
+Serial.begin (9600);
+pinMode(trigPin,OUTPUT);
+pinMode(echoPin,INPUT);
+ 
+ 
+}
+ 
+void loop (){
+//The following trigPin/echoPin cycle is used to
+//determine the distance of nearest object by
+//bouncing soundwaves off of it
+ 
+digitalWrite(trigPin,LOW);
+delayMicroseconds(2);
+ 
+digitalWrite(trigPin,HIGH);
+delayMicroseconds(10);
+ 
+digitalWrite(trigPin,LOW);
+duration = pulseIn(echoPin,HIGH);
+ 
+//Calculate the distance (in cm) based on the speed
+//of sound
+ 
+distance = duration/58.2;
+ // if the distance is less than 20 cm then position of servo will go to 180 degrees
+ //else the position is 0
+if (distance < 20 ){
+ 
+pos = 180;
+myServo1.write(pos);
+}
+else {
+ 
+pos = 0;
+myServo1.write(pos);
+ 
+}
+ 
+ 
+//delay 50ms before next read
+ 
+delay(50);
+ 
+}
